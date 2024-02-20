@@ -16,6 +16,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        buttonOk.setOnClickListener {
+//            verifPass()
+//            if (numberList == correctPassword) {
+//                val intent = Intent(this, ListActivity2::class.java)
+//                startActivity(intent)
+//
+//            } else {
+//                attempts--
+//                if (attempts == 0){
+//                    Toast.makeText(this, "Заблочен", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    Toast.makeText(this, "Неверный пароль", Toast.LENGTH_SHORT).show()
+//                    сleanPass()
+//                }
+//            }
+//        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         val numberList = mutableListOf<Int>()
         val correctPassword = arrayListOf(1,2,3,4)
 
@@ -40,10 +61,7 @@ class MainActivity : AppCompatActivity() {
         val buttonOk: Button = findViewById(R.id.buttonOk)
         val buttonClean: Button = findViewById(R.id.clean)
 
-        fun pass1BgW() { password1.setBackgroundResource(R.drawable.bg_view_white_oval) }
-        fun pass2BgW() { password2.setBackgroundResource(R.drawable.bg_view_white_oval) }
-        fun pass3BgW() { password3.setBackgroundResource(R.drawable.bg_view_white_oval) }
-        fun pass4BgW() { password4.setBackgroundResource(R.drawable.bg_view_white_oval) }
+
         fun pass4BgG() { password4.setBackgroundResource(R.drawable.bg_view_grey_oval) }
 
         fun changeTextView(textView: TextView) {
@@ -59,275 +77,80 @@ class MainActivity : AppCompatActivity() {
         }
 
         val sharedPreferences = getSharedPreferences("logPass", Context.MODE_PRIVATE)
+
         val editor = sharedPreferences.edit()
         editor.apply()
 
-        if (sharedPreferences.getBoolean("correctPassword", true) == true) {
+        if (!sharedPreferences.getBoolean("correctPassword", true)) {
             val intent = Intent(this, ListActivity2::class.java)
             startActivity(intent)
+        }else{
+            Toast.makeText(this, "false", Toast.LENGTH_SHORT).show()
         }
+
+
 
 
         fun verifPass(){
-            if (numberList == correctPassword) {
-                val intent = Intent(this, ListActivity2::class.java)
-                startActivity(intent)
-                editor.putBoolean("correctPassword", true)
+                if (numberList == correctPassword) {
+                    val intent = Intent(this, ListActivity2::class.java)
+                    startActivity(intent)
+                    editor.putBoolean("correctPassword", true)
 
-            } else {
-                Toast.makeText(this, "Неверный пароль", Toast.LENGTH_SHORT).show()
-                сleanPass()
-                editor.putBoolean("correctPassword", false)
-                attempts--
-                if (attempts == 0){
+                } else {
+                    Toast.makeText(this, "Неверный пароль", Toast.LENGTH_SHORT).show()
+                    сleanPass()
+                    editor.putBoolean("correctPassword", false)
+                    attempts--
+                    if (attempts == 0){
                         Toast.makeText(this, "Заблочен", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
-            editor.apply()
+                editor.apply()
         }
 
-        button0.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(0)
-                    pass1BgW()
+        fun Button.buttonClick(){
+            setOnClickListener {
+                val buttonText = (it as Button).text.toString()
+                val numberInt = buttonText.toInt()
+                when (numberList.size) {
+                    0 -> {
+                        numberList.add(numberInt)
+                        password1.setBackgroundResource(R.drawable.bg_view_white_oval)
+                    }
+                    1 -> {
+                        numberList.add(numberInt)
+                        password2.setBackgroundResource(R.drawable.bg_view_white_oval)
+                    }
+                    2 -> {
+                        numberList.add(numberInt)
+                        password3.setBackgroundResource(R.drawable.bg_view_white_oval)
+                    }
+                    3 -> {
+                        numberList.add(numberInt)
+                        password4.setBackgroundResource(R.drawable.bg_view_white_oval)
+                        verifPass()
+                    }
                 }
-                1 -> {
-                    numberList.add(0)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(0)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(0)
-                    pass4BgW()
-                    verifPass()
-                }
+                changeTextView(textList)
             }
-            changeTextView(textList)
         }
-        button1.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(1)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(1)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(1)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(1)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button2.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(2)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(2)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(2)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(2)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button3.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(3)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(3)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(3)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(3)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button4.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(4)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(4)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(4)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(4)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button5.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(5)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(5)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(5)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(5)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button6.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(6)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(6)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(6)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(6)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button7.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(7)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(7)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(7)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(7)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button8.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(8)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(8)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(8)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(8)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
-        button9.setOnClickListener {
-            when (numberList.size) {
-                0 -> {
-                    numberList.add(9)
-                    pass1BgW()
-                }
-                1 -> {
-                    numberList.add(9)
-                    pass2BgW()
-                }
-                2 -> {
-                    numberList.add(9)
-                    pass3BgW()
-                }
-                3 -> {
-                    numberList.add(9)
-                    pass4BgW()
-                    verifPass()
-                }
-            }
-            changeTextView(textList)
-        }
+
+
+        button0.buttonClick()
+        button1.buttonClick()
+        button2.buttonClick()
+        button3.buttonClick()
+        button4.buttonClick()
+        button5.buttonClick()
+        button6.buttonClick()
+        button7.buttonClick()
+        button8.buttonClick()
+        button9.buttonClick()
         buttonClean.setOnClickListener {
             сleanPass()
+
         }
-
-
-
-//        buttonOk.setOnClickListener {
-//            verifPass()
-//            if (numberList == correctPassword) {
-//                val intent = Intent(this, ListActivity2::class.java)
-//                startActivity(intent)
-//
-//            } else {
-//                attempts--
-//                if (attempts == 0){
-//                    Toast.makeText(this, "Заблочен", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this, "Неверный пароль", Toast.LENGTH_SHORT).show()
-//                    сleanPass()
-//                }
-//            }
-//        }
     }
 }
 
